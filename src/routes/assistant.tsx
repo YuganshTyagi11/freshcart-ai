@@ -3,17 +3,6 @@ import { Header } from "@/components/Header";
 import { AIAssistant } from "@/components/AIAssistant";
 
 export const Route = createFileRoute("/assistant")({
-  head: () => ({
-    meta: [
-      { title: "FreshCart" },
-      {
-        name: "description",
-        content: "Tell our AI your budget or recipe and get a complete cart instantly.",
-      },
-      { property: "og:title", content: "FreshCart AI Assistant" },
-      { property: "og:description", content: "Smart grocery shopping powered by AI." },
-    ],
-  }),
   component: AssistantPage,
 });
 

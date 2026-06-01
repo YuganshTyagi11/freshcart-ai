@@ -8,21 +8,6 @@ import { CATEGORIES, PRODUCTS, RECIPES, findProduct } from "@/lib/products";
 import { useCart } from "@/lib/cart-store";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "FreshCart" },
-      {
-        name: "description",
-        content:
-          "Order groceries with AI-powered shopping, recipe-based carts, and lightning-fast delivery on FreshCart.",
-      },
-      { property: "og:title", content: "FreshCart — Groceries, smarter" },
-      {
-        property: "og:description",
-        content: "AI-powered grocery ordering. Browse, search, and check out in minutes.",
-      },
-    ],
-  }),
   component: Index,
 });
 
