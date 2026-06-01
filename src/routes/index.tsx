@@ -79,7 +79,7 @@ function Index() {
                 placeholder="What do you need today? Milk, Fruits, Rice..."
                 className="flex-1 bg-transparent py-2 text-sm outline-none placeholder:text-muted-foreground"
               />
-              <button className="rounded-full bg-foreground px-5 py-2 text-sm font-semibold text-background">
+              <button className="rounded-full bg-foreground px-4 py-2 text-sm font-semibold text-background shrink-0">
                 Search
               </button>
             </form>
@@ -97,7 +97,7 @@ function Index() {
             </div>
           </div>
 
-          <div className="relative">
+          <div className="relative hidden md:block">
             <div className="grid grid-cols-2 gap-3">
               {["🥑", "🍓", "🥖", "🥬"].map((e, i) => (
                 <div
@@ -192,7 +192,7 @@ function Index() {
             Pick a recipe — we'll add every ingredient.
           </p>
         </div>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           {RECIPES.map((r) => {
             const total = r.ingredients.reduce((acc, id) => acc + (findProduct(id)?.price ?? 0), 0);
             return (
