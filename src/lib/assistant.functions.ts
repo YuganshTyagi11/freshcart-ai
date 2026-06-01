@@ -1,23 +1,5 @@
-import { createServerFn } from "@tanstack/react-start";
-import { z } from "zod";
-
-const InputSchema = z.object({
-  prompt: z.string().min(2).max(500),
-  catalog: z
-    .array(
-      z.object({
-        id: z.string(),
-        name: z.string(),
-        price: z.number(),
-        unit: z.string(),
-        category: z.string(),
-      }),
-    )
-    .max(200),
-});
-
 type CatalogItem = { id: string; name: string; price: number; unit: string; category: string };
-type CartItem = { id: string; qty: number; reason?: string };
+export type CartItem = { id: string; qty: number; reason?: string };
 
 // ── Local Smart Fallback (works without any API key) ────────────────────────
 
@@ -41,13 +23,11 @@ function matchCategories(prompt: string): string[] {
 function matchRecipes(prompt: string): string[][] {
   const p = prompt.toLowerCase();
   const recipes: string[][] = [];
-
-  if (/pasta|spaghetti|italian/.test(p)) recipes.push(["p22", "p23", "p11", "p3", "p24"]); // Classic Pasta
-  if (/breakfast|morning/.test(p)) recipes.push(["p14", "p4", "p16", "p2"]); // Fresh Breakfast
-  if (/salad|garden|healthy|light/.test(p)) recipes.push(["p10", "p9", "p12", "p24"]); // Garden Salad
-  if (/smoothie|fruit|blended/.test(p)) recipes.push(["p6", "p7", "p2", "p1"]); // Fruit Smoothie
-  if (/movie|netflix|night|snack|party/.test(p)) recipes.push(["p19", "p20", "p21", "p18"]); // Movie night snacks
-
+  if (/pasta|spaghetti|italian/.test(p)) recipes.push(["p22", "p23", "p11", "p3", "p24"]);
+  if (/breakfast|morning/.test(p)) recipes.push(["p14", "p4", "p16", "p2"]);
+  if (/salad|garden|healthy|light/.test(p)) recipes.push(["p10", "p9", "p12", "p24"]);
+  if (/smoothie|fruit|blended/.test(p)) recipes.push(["p6", "p7", "p2", "p1"]);
+  if (/movie|netflix|night|snack|party/.test(p)) recipes.push(["p19", "p20", "p21", "p18"]);
   return recipes;
 }
 
@@ -62,20 +42,14 @@ function localAssistant(
   let selected: CartItem[] = [];
   let message = "";
 
-  // If recipe matched, use it
   if (recipes.length > 0) {
-    const ids = recipes[0];
-    selected = ids.map((id) => ({ id, qty: 1 }));
+    selected = recipes[0].map((id) => ({ id, qty: 1 }));
     message = "Here's everything you need for that recipe!";
-  }
-  // If categories matched, pick items from those
-  else if (cats.length > 0) {
+  } else if (cats.length > 0) {
     const pool = catalog.filter((p) => cats.includes(p.category));
     selected = pool.slice(0, 5).map((p) => ({ id: p.id, qty: 1 }));
     message = `Found some great ${cats.join(" & ")} items for you!`;
-  }
-  // Generic: pick popular items
-  else {
+  } else {
     selected = [
       { id: "p1", qty: 1, reason: "Fresh milk - a staple" },
       { id: "p6", qty: 1, reason: "Bananas - healthy snack" },
@@ -85,7 +59,6 @@ function localAssistant(
     message = "Here are some popular picks to get you started!";
   }
 
-  // Respect budget
   if (budget) {
     let total = 0;
     const withinBudget: CartItem[] = [];
@@ -102,7 +75,6 @@ function localAssistant(
       selected = withinBudget;
       message += ` Total: ₹${total} (within your ₹${budget} budget).`;
     } else {
-      // Pick cheapest items
       const sorted = [...catalog].sort((a, b) => a.price - b.price);
       let remaining = budget;
       const budgetItems: CartItem[] = [];
@@ -120,7 +92,7 @@ function localAssistant(
   return { message, items: selected };
 }
 
-// ── Gemini API (real AI when key is available) ──────────────────────────────
+// ── Gemini API (client-side, optional) ──────────────────────────────────────
 
 const GEMINI_URL =
   "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
@@ -154,7 +126,8 @@ async function callGemini(
   prompt: string,
   catalog: CatalogItem[],
 ): Promise<{ message: string; items: CartItem[] } | null> {
-  const apiKey = process.env.GOOGLE_API_KEY;
+  const apiKey = (import.meta as unknown as { env: Record<string, string | undefined> }).env
+    .VITE_GOOGLE_API_KEY;
   if (!apiKey) return null;
 
   const systemPrompt = buildSystemPrompt(catalog);
@@ -198,18 +171,13 @@ async function callGemini(
   }
 }
 
-// ── Server Function ─────────────────────────────────────────────────────────
+// ── Main Export ─────────────────────────────────────────────────────────────
 
-export const askAssistant = createServerFn({ method: "POST" })
-  .inputValidator((data: unknown) => InputSchema.parse(data))
-  .handler(async ({ data }) => {
-    // Try real AI first
-    const aiResult = await callGemini(data.prompt, data.catalog);
-    if (aiResult && aiResult.items.length > 0) {
-      return { error: null, ...aiResult };
-    }
-
-    // Fallback to local smart matching
-    const localResult = localAssistant(data.prompt, data.catalog);
-    return { error: null, ...localResult };
-  });
+export async function askAssistant(prompt: string, catalog: CatalogItem[]) {
+  const aiResult = await callGemini(prompt, catalog);
+  if (aiResult && aiResult.items.length > 0) {
+    return { error: null, ...aiResult };
+  }
+  const localResult = localAssistant(prompt, catalog);
+  return { error: null, ...localResult };
+}

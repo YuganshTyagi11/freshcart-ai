@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Sparkles, Send, Loader2, Check } from "lucide-react";
-import { useServerFn } from "@tanstack/react-start";
 import { askAssistant } from "@/lib/assistant.functions";
 import { PRODUCTS, findProduct } from "@/lib/products";
 import { useCart } from "@/lib/cart-store";
@@ -15,7 +14,6 @@ const EXAMPLES = [
 type Suggestion = { id: string; qty: number; reason?: string };
 
 export function AIAssistant({ compact = false }: { compact?: boolean }) {
-  const callAssistant = useServerFn(askAssistant);
   const addMany = useCart((s) => s.addMany);
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
@@ -34,24 +32,20 @@ export function AIAssistant({ compact = false }: { compact?: boolean }) {
     setMessage("");
     setAdded(false);
     try {
-      const res = await callAssistant({
-        data: {
-          prompt: q,
-          catalog: PRODUCTS.map((p) => ({
-            id: p.id,
-            name: p.name,
-            price: p.price,
-            unit: p.unit,
-            category: p.category,
-          })),
-        },
-      });
+      const catalog = PRODUCTS.map((p) => ({
+        id: p.id,
+        name: p.name,
+        price: p.price,
+        unit: p.unit,
+        category: p.category,
+      }));
+      const res = await askAssistant(q, catalog);
       if (res.error) setError(res.error);
       else {
         setMessage(res.message);
         setItems(res.items);
       }
-    } catch (e) {
+    } catch {
       setError("Failed to reach the assistant.");
     } finally {
       setLoading(false);
