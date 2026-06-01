@@ -27,14 +27,20 @@ export function Header() {
               to="/"
               className="rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
               activeOptions={{ exact: true }}
-              activeProps={{ className: "rounded-full px-4 py-2 text-sm font-medium bg-secondary text-foreground" }}
+              activeProps={{
+                className:
+                  "rounded-full px-4 py-2 text-sm font-medium bg-secondary text-foreground",
+              }}
             >
               Shop
             </Link>
             <Link
               to="/assistant"
               className="flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
-              activeProps={{ className: "flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium bg-secondary text-foreground" }}
+              activeProps={{
+                className:
+                  "flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium bg-secondary text-foreground",
+              }}
             >
               <Sparkles className="h-4 w-4 text-accent" />
               AI Assistant
@@ -42,7 +48,10 @@ export function Header() {
             <Link
               to="/dashboard"
               className="flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
-              activeProps={{ className: "flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium bg-secondary text-foreground" }}
+              activeProps={{
+                className:
+                  "flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium bg-secondary text-foreground",
+              }}
             >
               <LayoutDashboard className="h-4 w-4" />
               Dashboard

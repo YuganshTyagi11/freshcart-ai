@@ -42,9 +42,10 @@ export const useCart = create<State>()(
         set((s) => ({ items: s.items.filter((i) => i.productId !== productId) })),
       setQty: (productId, qty) =>
         set((s) => ({
-          items: qty <= 0
-            ? s.items.filter((i) => i.productId !== productId)
-            : s.items.map((i) => (i.productId === productId ? { ...i, qty } : i)),
+          items:
+            qty <= 0
+              ? s.items.filter((i) => i.productId !== productId)
+              : s.items.map((i) => (i.productId === productId ? { ...i, qty } : i)),
         })),
       clear: () => set({ items: [] }),
       addMany: (ids) =>
@@ -61,10 +62,7 @@ export const useCart = create<State>()(
         })),
       saveList: (name, productIds) =>
         set((s) => ({
-          savedLists: [
-            ...s.savedLists,
-            { id: `l${Date.now()}`, name, productIds },
-          ],
+          savedLists: [...s.savedLists, { id: `l${Date.now()}`, name, productIds }],
         })),
       checkout: () => {
         const state = get();

@@ -77,8 +77,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "FreshCart — Fresh Groceries Delivered in Minutes" },
-      { name: "description", content: "Smart grocery ordering with AI shopping assistant, recipe-based carts, and fast delivery." },
+      { title: "FreshCart" },
+      {
+        name: "description",
+        content:
+          "Smart grocery ordering with AI shopping assistant, recipe-based carts, and fast delivery.",
+      },
       { name: "author", content: "FreshCart" },
       { name: "theme-color", content: "#22C55E" },
       { property: "og:title", content: "FreshCart" },
@@ -87,6 +91,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary" },
     ],
     links: [
+      { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
       { rel: "stylesheet", href: appCss },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },

@@ -64,14 +64,18 @@ export function AIAssistant({ compact = false }: { compact?: boolean }) {
   }, 0);
 
   return (
-    <div className={`rounded-3xl border border-border bg-card p-5 shadow-card ${compact ? "" : "md:p-8"}`}>
+    <div
+      className={`rounded-3xl border border-border bg-card p-5 shadow-card ${compact ? "" : "md:p-8"}`}
+    >
       <div className="flex items-center gap-2">
         <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent/15 text-accent">
           <Sparkles className="h-5 w-5" />
         </span>
         <div>
           <h3 className="font-display font-bold leading-tight">AI Shopping Assistant</h3>
-          <p className="text-xs text-muted-foreground">Tell it your budget or recipe — get a full cart in seconds.</p>
+          <p className="text-xs text-muted-foreground">
+            Tell it your budget or recipe — get a full cart in seconds.
+          </p>
         </div>
       </div>
 
@@ -113,7 +117,9 @@ export function AIAssistant({ compact = false }: { compact?: boolean }) {
       )}
 
       {error && (
-        <div className="mt-4 rounded-2xl bg-destructive/10 px-4 py-3 text-sm text-destructive">{error}</div>
+        <div className="mt-4 rounded-2xl bg-destructive/10 px-4 py-3 text-sm text-destructive">
+          {error}
+        </div>
       )}
 
       {loading && (
@@ -132,7 +138,10 @@ export function AIAssistant({ compact = false }: { compact?: boolean }) {
               const p = findProduct(it.id);
               if (!p) return null;
               return (
-                <div key={it.id} className="flex items-center gap-3 rounded-2xl border border-border p-3">
+                <div
+                  key={it.id}
+                  className="flex items-center gap-3 rounded-2xl border border-border p-3"
+                >
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-secondary text-2xl">
                     {p.emoji}
                   </div>
@@ -140,7 +149,9 @@ export function AIAssistant({ compact = false }: { compact?: boolean }) {
                     <p className="font-medium">
                       {p.name} <span className="text-xs text-muted-foreground">× {it.qty}</span>
                     </p>
-                    {it.reason && <p className="truncate text-xs text-muted-foreground">{it.reason}</p>}
+                    {it.reason && (
+                      <p className="truncate text-xs text-muted-foreground">{it.reason}</p>
+                    )}
                   </div>
                   <span className="font-display font-semibold">₹{p.price * it.qty}</span>
                 </div>
@@ -162,7 +173,13 @@ export function AIAssistant({ compact = false }: { compact?: boolean }) {
             }}
             className="flex w-full items-center justify-center gap-2 rounded-full bg-gradient-primary py-3 font-semibold text-primary-foreground shadow-glow"
           >
-            {added ? <><Check className="h-4 w-4" /> Added to cart</> : "Add all to cart"}
+            {added ? (
+              <>
+                <Check className="h-4 w-4" /> Added to cart
+              </>
+            ) : (
+              "Add all to cart"
+            )}
           </button>
         </div>
       )}

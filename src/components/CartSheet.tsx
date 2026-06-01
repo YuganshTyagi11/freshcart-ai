@@ -41,11 +41,13 @@ export function CartSheet({ open, onClose }: { open: boolean; onClose: () => voi
 
         {success ? (
           <div className="flex flex-1 flex-col items-center justify-center gap-3 p-8 text-center">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-3xl">✅</div>
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-3xl">
+              ✅
+            </div>
             <h3 className="font-display text-xl font-bold">Order placed!</h3>
             <p className="text-sm text-muted-foreground">
-              Order <span className="font-mono font-semibold text-foreground">{success}</span> is being prepared.
-              Track it from your Dashboard.
+              Order <span className="font-mono font-semibold text-foreground">{success}</span> is
+              being prepared. Track it from your Dashboard.
             </p>
             <button
               onClick={onClose}
